@@ -1,0 +1,16 @@
+---
+title: "README"
+---
+
+## Software requirements
+
+- ShapeIT
+- RFMix
+
+## Step X: Create admixed phased file
+
+<code>bash merge_afr_am_bdos.sh</code>
+Merge the African American and Barbados sample sets.
+
+<code>bash run_shapeit.sh <plink_file_prefix> <chr></code>
+Run ShapeIT by chromosome. The input PLINK file is the output merged file created above. 

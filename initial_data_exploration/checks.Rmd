@@ -1,0 +1,48 @@
+---
+title: "Initial checks"
+output: html_document
+---
+
+## Check the MAF distribution in the typed overlap set
+
+I am worried that because most of the overlapping SNPs come from the ADPC chip, there will be too many rare SNPs, and that this would affect LAI. From the below it seems that there are not too many extremely rare SNPs (0-1%) for African Americans and Barbados, so maybe things will be okay. Strangely, there are a lot more SNPs that fall into this category for Puerto Rico. But since we will likely be using the Puerto Rican GWAS data to get a better overlap of SNPs with the Native American (Bigham) data, this is probably okay
+
+```{r}
+system("plink --bfile ../../caapa_imputation_pipeline/data/output/typed_overlap/afr_am --freq --out ./data/output/afr_am")
+aa.frq <- read.table("./data/output/afr_am.frq", head=T, stringsAsFactors = F)
+hist(aa.frq$MAF, breaks=100, xlab="MAF", main="African American")
+
+system("plink --bfile ../../caapa_imputation_pipeline/data/output/typed_overlap/jhu_bdos --freq --out ./data/output/jhu_bdos")
+bdos.frq <- read.table("./data/output/jhu_bdos.frq", head=T, stringsAsFactors = F)
+hist(bdos.frq$MAF, breaks=100, xlab="MAF", main="Barbados")
+
+system("plink --bfile ../../caapa_imputation_pipeline/data/output/typed_overlap/ucsf_pr --freq --out ./data/output/ucsf_pr")
+pr.frq <- read.table("./data/output/ucsf_pr.frq", head=T, stringsAsFactors = F)
+hist(pr.frq$MAF, breaks=100, xlab="MAF", main="Puerto Rico")
+
+```
+
+## How many of the Bigham SNPs overlap with the GWAS+ADPC overlapping SNPs?
+
+```{r}
+
+adpc <- read.table("../../caapa_imputation_pipeline/data/output/typed_overlap/afr_am.bim", stringsAsFactors = F)
+bigham <- read.table("./data/input/Bigham.hg19.bim", stringsAsFactors = F)
+adpc$SNP <- paste(adpc$V1, adpc$V4, sep=":")
+bigham$SNP <- paste(bigham$V1, bigham$V4, sep=":")
+length(intersect(adpc$SNP, bigham$SNP))
+
+```
+
+## How many of the Bigham SNPs overlap with the GWAS+ADPC UCSF_PR SNPs?
+
+```{r}
+
+pr.gwas <- read.table("../../caapa_imputation_pipeline/data/working/ucsf_pr/gwas_qc.bim", stringsAsFactors = F)
+pr.adpc <- read.table("../../caapa_imputation_pipeline/data/working/ucsf_pr/adpc_qc.bim", stringsAsFactors = F)
+pr <- rbind(pr.gwas, pr.adpc)
+pr$SNP <- paste(pr$V1, pr$V4, sep=":")
+length(intersect(pr$SNP, bigham$SNP))
+
+```
+
