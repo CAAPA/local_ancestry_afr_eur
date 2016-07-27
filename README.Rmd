@@ -4,13 +4,29 @@ title: "README"
 
 ## Software requirements
 
-- ShapeIT
-- RFMix
+- ShapeIT (v2.r837 was used)
+- RFMix (v1.5.4 was used)
+
+## Step 1: 
+
+Run <code>setup.sh</code> on your tower and Rosie.
+
+Create the directory data/input/genetic_map_hapmap on Rosie. 
+
+Download http://www.shapeit.fr/files/genetic_map_b37.tar.gz. 
+
+Unzip the files in there, and rename each of the files to chr\<nr\>.txt
 
 ## Step X: Create admixed phased file
+
+### Run on tower
 
 <code>bash merge_afr_am_bdos.sh</code>
 Merge the African American and Barbados sample sets.
 
-<code>bash run_shapeit.sh <plink_file_prefix> <chr></code>
+Copy ../data/input/afr_am_bdos* to the corresponding directory on Rosie.
+
+### Run on Rosie
+
+<code>bash run_shapeit.sh \<plink_file_prefix\> \<chr\></code>
 Run ShapeIT by chromosome. The input PLINK file is the output merged file created above. 
