@@ -6,27 +6,40 @@ title: "README"
 
 - ShapeIT (v2.r837 was used)
 - RFMix (v1.5.4 was used)
+- VCFTools (v0.1.13 was used)
 
-## Step 1: 
+## Step 1: Setup
 
 Run <code>setup.sh</code> on your tower and Rosie.
 
-Create the directory data/input/genetic_map_hapmap on Rosie. 
+## Step 2: Create reference phased files
 
-Download http://www.shapeit.fr/files/genetic_map_b37.tar.gz. 
+### On Rosie
 
-Unzip the files in there, and rename each of the files to chr\<nr\>.txt
+Download the VCF files in ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ to data/raw/tgp_release_20130502. Create the following file from the first worksheet of http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/working/20130606_sample_info/20130606_sample_info.xlsx:
+<i>ceu_yri_ids.txt</i> - should contain a list of all CEU and YRI IDs
 
-## Step X: Create admixed phased file
+Run <code>create_tgp_input_files.sh</code>
+This script uses vcftools to extract the already phased TGP CEU and YRI subjects into IMPUTE file format (which is easy to later on merge with the admixed ShapeIT phased files).
+
+## Step 3: Create admixed phased files
 
 ### Run on tower
 
-<code>bash merge_afr_am_bdos.sh</code>
+<code>merge_afr_am_bdos.sh</code>
 Merge the African American and Barbados sample sets.
 
 Copy ../data/input/afr_am_bdos* to the corresponding directory on Rosie.
 
 ### Run on Rosie
 
-<code>bash run_shapeit.sh \<plink_file_prefix\> \<chr\></code>
+Download http://www.shapeit.fr/files/genetic_map_b37.tar.gz. Unzip the files to data/input/genetic_map_hapmap, and rename each of the files to chr\<nr\>.txt
+
+<code>run_shapeit.sh \<plink_file_prefix\> \<chr\></code>
 Run ShapeIT by chromosome. The input PLINK file is the output merged file created above. 
+
+## Step 4: Run RFMix by chromosome 
+
+<code>run_rfmix.sh <chr></code>
+
+TODO
