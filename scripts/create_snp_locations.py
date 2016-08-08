@@ -13,7 +13,8 @@ map_file = open("../data/input/genetic_map_tgp/chr" + chr + ".txt")
 cm_hash = {}
 for line in map_file:
     e=line.strip().split()
-    snp=e[0]
+    pos=e[1]
+    snp=chr + ":" + pos
     cm=e[2]
     if snp in snps_hash.keys():
         cm_hash[snp] = cm
