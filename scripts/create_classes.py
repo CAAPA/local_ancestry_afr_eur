@@ -3,7 +3,7 @@ import os, sys
 chr=sys.argv[1]
 
 out_file=open("../data/input/rfmix/chr" + chr + "/classes.txt", "w")
-for i in range(0,766):
+for i in range(0,7416):
     out_file.write("0 0 ")
 for i in range(0, 99):
     out_file.write("1 1 ")
