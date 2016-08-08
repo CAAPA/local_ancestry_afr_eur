@@ -28,7 +28,7 @@ cat ../data/intermediate/shapeit_output/chr${chr}.haps | cut -f2-5 -d ' ' > tmp_
 python get_admixed_snps.py $chr
 
 #Rewrite the reference population file to contain only the SNPs to keep
-sed -e '1d'  ../data/input/tgp/chr${chr}.impute.legend | cut -f1 -d' ' > \
+sed -e '1d'  ../data/input/tgp/chr${chr}.impute.legend | cut -f2 -d' '  | sed "s/^/${chr}:/" > \
                                                              tmp_chr${chr}_ref_snps.txt
 paste tmp_chr${chr}_ref_snps.txt  ../data/input/tgp/chr${chr}.impute.hap > \
        tmp_chr${chr}_ref_select.txt
