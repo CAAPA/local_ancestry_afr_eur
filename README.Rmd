@@ -17,7 +17,10 @@ Run <code>setup.sh</code> on your tower and Rosie.
 ### On Rosie
 
 Download the VCF files in ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ to data/raw/tgp_release_20130502. Create the following file from the first worksheet of http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/working/20130606_sample_info/20130606_sample_info.xlsx:
-<i>ceu_yri_ids.txt</i> - should contain a list of all CEU and YRI IDs
+<i>ceu_yri_ids.txt</i> in this same directory - should contain a list of all CEU and YRI IDs
+
+Download TGP genetic map files from https://github.com/joepickrell/1000-genomes-genetic-maps/tree/master/interpolated_from_hapmap (this was downloaded 29 April 2016).
+Unzip them to data/input/genetic_map_tgp, and rename to chr1.txt, chr2.txt, ..., chr22.txt
 
 Run <code>create_tgp_input_files.sh</code>
 This script uses vcftools to extract the already phased TGP CEU and YRI subjects into IMPUTE file format (which is easy to later on merge with the admixed ShapeIT phased files).
@@ -40,6 +43,34 @@ Run ShapeIT by chromosome. The input PLINK file is the output merged file create
 
 ## Step 4: Run RFMix by chromosome 
 
+Run the below on Rosie for chromosomes 1-22
+
 <code>run_rfmix.sh <chr></code>
 
-TODO
+Once all the jobs completed, copy these output files over to your tower
+
+<code>scp -r dayam@cubipmlgn01.ucdenver.pvt:/gpfs/barnes_home/dayam/caapa_local_ancestry/data/output/rfmix "/Volumes/Promise\ Pegasus/caapa_local_ancestry/data/output"</code>
+
+## Step 5: Estimate genome-wide ancestry
+
+### Run on Tower
+
+Ensure that the Admixture.3.Q and Admixture.fam files (run by Nick on BC gene) is in the data/input/ directory. 
+
+Estimate genome-wide ancestry from RFMix output, and merge that with ADMIXTURE genome-wide ancestry, by running the following script:
+
+<code>calc_gwide_ancestry.sh<chr></code>
+
+## Step 6: Calculate the proportion of African ancestry at each local ancestry segment
+
+### Run on Tower
+
+TODO on Rosie:
+calc_local_afr_ancestry.R
+
+
+## Step 7: Do local ancestry QC
+
+These steps are summarized in the report <i>local_ancestry_qc.Rmd</i>
+Before run
+
