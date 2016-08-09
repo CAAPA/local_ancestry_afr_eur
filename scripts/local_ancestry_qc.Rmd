@@ -1,0 +1,83 @@
+---
+title: "Local ancestry inference QC"
+output: html_document
+---
+
+## Genome-wide ancestry differences
+
+Below is a summary and histogram of the differences between genome-wide ancestry estimated using ADMIXTURE, 
+and genome-wide ancestry estimated using RFMix, per individual (7416 individuals in total). 
+The estimates are on the whole highly concordant, except for ....
+
+```{r, echo=FALSE}
+gwide <- read.delim("../data/output/merged_gwide.txt")
+delta <- gwide$RFMIX_GW_AFR - gwide$ADMIXTURE_GW_AFR
+summary(delta)
+hist(delta, breaks=50, main="Genome-wide ancestry estimate differences")
+(sum(abs(delta) > 0.05 ))
+(gwide[abs(delta) > 0.05,])
+```
+
+## Local ancestry deviation distribution
+
+The deviation between mean local African ancestry and mean genome-wide African ancestry was 
+calculated for each local ancestry segment (means calculated across all 7416 individuals). 
+One expects these deviations to be normally distributed (if not, this may indicate
+errors in local ancestry estimation).
+The distribution of these deviations look as expected.
+
+```{r, echo=FALSE}
+local.anc <- read.delim("../data/output/local_ancestry_segments.txt")
+mean.afr.anc <- mean(gwide$RFMIX_GW_AFR)
+dev <- local.anc$prop.afr - mean.afr.anc
+z <- dev/sd(dev)
+hist(z, breaks=50, main="Histogram of local ancestry deviations")
+local.anc[z < -4,]
+z[z < -4]
+```
+
+## Local ancestry across the genome
+
+Below is a plot of the mean local ancestry of the 7416 individuals across the genome.
+
+```{r, echo=FALSE, fig.height=12, fig.width=9}
+draw.frame <- data.frame()
+snp.pos <- read.table("../data/input/afr_am_bdos.fam")[,c(2,4)]
+for (chr in 1:22) {
+  chr.anc <- local.anc[local.anc$chr.nr == chr,] 
+  chr.anc$end.snp.nr <- cumsum(chr.anc$nr.snps)
+  chr.anc$start.snp.nr <- c(1, chr.anc$end.snp.nr[-length(chr.anc$end.snp.nr)] + 1)
+  snps <- read.table(paste0("../data/output/rfmix/chr", chr, "/snps.txt"))[,1]
+  chr.anc$begin.snp <- snps[chr.anc$start.snp.nr]
+  chr.anc$end.snp <- snps[chr.anc$end.snp.nr]
+  chr.anc <- merge(chr.anc, snp.pos, by.x="begin.snp", by.y="V2")
+  names(chr.anc)[dim(chr.anc)[2]] <- "begin.pos"
+  chr.anc <- merge(chr.anc, snp.pos, by.x="end.snp", by.y="V2")
+  names(chr.anc)[dim(chr.anc)[2]] <- "end.pos"
+  chr.anc <- chr.anc[order(chr.anc$seg.nr),]
+  chr.anc$pos <- rowMeans(chr.anc[,c(dim(chr.anc)[2]-1,dim(chr.anc)[2])])
+  draw.frame <- rbind(draw.frame,
+                      data.frame(Chromosome=paste("Chromosome", rep(chr, dim(chr.anc)[1])),
+                                 Position=chr.anc$pos/10000000,
+                                 Ancestry=chr.anc$prop.afr.anc))
+}
+draw.frame$Chromosome <- factor(draw.frame$Chromosome, 
+                                levels=c(
+                                  "Chromosome 1", "Chromosome 2", "Chromosome 3", "Chromosome 4",
+                                  "Chromosome 5", "Chromosome 6", "Chromosome 7", "Chromosome 8",
+                                  "Chromosome 9","Chromosome 10","Chromosome 11","Chromosome 12",
+                                  "Chromosome 13","Chromosome 14","Chromosome 15","Chromosome 16",
+                                  "Chromosome 17","Chromosome 18","Chromosome 19","Chromosome 20",
+                                  "Chromosome 21","Chromosome 22"))
+library(ggplot2)
+ggplot(draw.frame, aes(Position, Ancestry)) +  
+  facet_wrap( ~ Chromosome, nrow=6, ncol=4) + 
+  geom_line(size=0.2) + 
+  labs(x = expression(paste("Base pair position ", (10^7)))) + 
+  labs(y = "Proportion African ancestry") +
+  theme_bw() +
+  theme(legend.position="top") + 
+  scale_color_brewer(palette="Set1") +
+  geom_hline(aes(yintercept=mean.afr.anc), size=0.0725)
+```
+

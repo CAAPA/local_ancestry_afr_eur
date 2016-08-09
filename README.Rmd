@@ -59,18 +59,18 @@ Ensure that the Admixture.3.Q and Admixture.fam files (run by Nick on BC gene) i
 
 Estimate genome-wide ancestry from RFMix output, and merge that with ADMIXTURE genome-wide ancestry, by running the following script:
 
-<code>calc_gwide_ancestry.sh<chr></code>
+<code>calc_gwide_ancestry.sh</code>
 
 ## Step 6: Calculate the proportion of African ancestry at each local ancestry segment
 
 ### Run on Tower
 
-TODO on Rosie:
-calc_local_afr_ancestry.R
-
+<code>calc_local_afr_ancestry.R</code>
 
 ## Step 7: Do local ancestry QC
 
-These steps are summarized in the report <i>local_ancestry_qc.Rmd</i>
-Before run
+### Run on Tower
+
+These steps are run automatically and summarized in the report <i>local_ancestry_qc.Rmd</i>
+
 
