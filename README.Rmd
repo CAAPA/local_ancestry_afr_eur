@@ -5,6 +5,15 @@
 - RFMix (v1.5.4 was used)
 - VCFTools (v0.1.13 was used)
 
+## Server location
+This project lives on Rosie at the following location: /gpfs/barnes_home/dayam/caapa_local_ancestry
+
+Some of these steps were also run on Michelle's tower: /Volumes/Promise Pegasus/caapa_local_ancestry
+
+## Steps to run
+
+These scripts were run for 4 cohorts, by executing the following 4 scripts:
+
 ## Step 1: Setup
 
 Run <code>setup.sh</code> on your tower and Rosie.
