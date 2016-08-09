@@ -2,7 +2,7 @@ nr.indiv <- 7416
 nr.haplos <- nr.indiv*2
 
 frame <- data.frame()
-for (chr in 21:22) {
+for (chr in 1:22) {
    print(chr)
    calls <- read.table(paste0("../data/output/rfmix/chr", chr, "/local_ancestry.0.Viterbi.txt"))-1
    segments <- read.table(paste0("../data/output/rfmix/chr", chr, "/local_ancestry.0.SNPsPerWindow.txt"))
