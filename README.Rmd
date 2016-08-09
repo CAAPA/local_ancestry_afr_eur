@@ -1,5 +1,6 @@
 ## Software requirements
 
+- PLINK v2
 - ShapeIT (v2.r837 was used)
 - RFMix (v1.5.4 was used)
 - VCFTools (v0.1.13 was used)
