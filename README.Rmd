@@ -1,7 +1,3 @@
----
-title: "README"
----
-
 ## Software requirements
 
 - ShapeIT (v2.r837 was used)
