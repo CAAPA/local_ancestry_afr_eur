@@ -42,7 +42,7 @@ Run ShapeIT by chromosome. The input PLINK file is the output merged file create
 
 Run the below on Rosie for chromosomes 1-22
 
-<code>run_rfmix.sh <chr></code>
+<code>run_rfmix.sh \<chr\></code>
 
 Once all the jobs completed, copy these output files over to your tower
 
